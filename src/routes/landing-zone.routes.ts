@@ -5,10 +5,11 @@ import { EZone, ICoordinates } from 'src/types/landing-zone.types';
 import { drone } from 'src/utils/constants';
 import { getCoordinates } from 'src/utils/landing-zone.helpers';
 import { validate } from 'src/utils/validation';
+import { search } from 'src/utils';
 
 const router = Router();
 
-router.get('/', (req, res) => {
+router.get('/', (_, res) => {
   res.send(
     `${drone} needs to fly to find a landing zone, but is not sure which of the 10 landing zones has the correct coordinates.
 
@@ -44,18 +45,12 @@ router.get(
 
 // Function to update
 export const isValidLandingZone = ({ R1: arr1, R2: arr2 }: ICoordinates) => {
-  const valid: boolean[] = [];
-  for (let i = 0; i < arr2.length; i++) {
-    for (let j = 0; j < arr1.length; j++) {
-      if (arr2[i] === arr1[j]) {
-        valid.push(true);
-      }
-    }
+  for (const cor_r2 of arr2) {
+    // If cor in r2 is not in R1 cor
+    if (!search.isNumberInArray(arr1, cor_r2)) return false;
   }
-  if (valid.length === arr2.length) {
-    return true;
-  }
-  return false;
+
+  return true;
 };
 
 export default router;
