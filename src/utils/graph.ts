@@ -60,16 +60,15 @@ const convertArryPath2StringPath = (
     if (!search.isNumberInArray(path, start)) path.splice(0, 0, start);
   }
 
-  if (paths[end].length === 0) return '';
+  if (paths[end].length === 0) return [];
 
-  let path_string = '';
+  const paths_array: string[] = [];
 
   for (const path of paths[end]) {
-    if (path_string == '') path_string = Object.keys(graph)[path];
-    else path_string = `${path_string} -> ${Object.keys(graph)[path]}`;
+    paths_array.push(Object.keys(graph)[path]);
   }
 
-  return path_string;
+  return paths_array;
 };
 
 /**
@@ -154,7 +153,7 @@ const findShortestPath = (graph: any, start: string, end: string) => {
   if (start_idx === end_idx)
     return {
       distance: 0,
-      path: `${start} -> ${end}`,
+      path: [start, end],
     };
 
   const result = bfs(matrix_graph, start_idx);
